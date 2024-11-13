@@ -1,0 +1,182 @@
+<program> -> <method-decl> <method-decl-list>
+<method-decl-list> -> <method-decl> <method-decl-list>
+<method-decl-list> -> ε
+
+<method-decl> -> <type> MAIN IDENT LPAREN <formal-params> RPAREN <block>
+<method-decl> -> <type> IDENT LPAREN <formal-params> RPAREN <block>
+
+<formal-params> -> <formal-param> <formal-param-list>
+<formal-param-list> -> COMMA <formal-param> <formal-param-list>
+<formal-param-list> -> ε
+
+<formal-param> -> <type> IDENT
+
+<type> -> INT
+<type> -> REAL
+<type> -> STRING
+
+<block> -> BEGIN <statements> END
+<statements> -> <statement> <statement-list>
+<statement-list> -> <statement> <statement-list>
+<statement-list> -> ε
+
+<statement> -> <block>
+<statement> -> <local-var-decl>
+<statement> -> <assign-stmt>
+<statement> -> <return-stmt>
+<statement> -> <if-stmt>
+<statement> -> <write-stmt>
+<statement> -> <read-stmt>
+
+<local-var-decl> -> <type> IDENT SEMICOLON
+<local-var-decl> -> <type> <assign-stmt>
+
+<assign-stmt> -> IDENT ASSIGN-OP <expression> SEMICOLON
+<assign-stmt> -> IDENT ASSIGN-OP QSTRING SEMICOLON
+
+<return-stmt> -> RETURN <expression> SEMICOLON
+
+<if-stmt> -> IF LPAREN <bool-expression> RPAREN <statement>
+<if-stmt> -> IF LPAREN <bool-expression> RPAREN <statement> ELSE <statement>
+
+<write-stmt> -> WRITE LPAREN <expression> COMMA QSTRING RPAREN SEMICOLON
+<read-stmt> -> READ LPAREN IDENT COMMA QSTRING RPAREN SEMICOLON
+
+<expression> -> <mult-expr> <mult-expr-list>
+<mult-expr-list> -> <add-oper> <mult-expr> <mult-expr-list>
+<mult-expr-list> -> ε
+
+<mult-expr> -> <primary-expr> <primary-expr-list>
+<primary-expr-list> -> <mult-oper> <primary-expr> <primary-expr-list>
+<primary-expr-list> -> ε
+
+<primary-expr> -> <num-constant>
+<primary-expr> -> IDENT
+<primary-expr> -> LPAREN <expression> RPAREN
+<primary-expr> -> IDENT LPAREN <actual-params> RPAREN
+
+<bool-expression> -> <expression> EQ <expression>
+<bool-expression> -> <expression> NEQ <expression>
+
+<actual-params> -> <expression> <expression-list>
+<actual-params> -> ε
+<expression-list> -> COMMA <expression> <expression-list>
+<expression-list> -> ε
+
+<num-constant> -> INT-CONSTANT
+<num-constant> -> REAL-CONSTANT
+
+
+
+// Cuvinte cheie
+WRITE -> 'WRITE'
+READ -> 'READ'
+IF -> 'IF'
+ELSE -> 'ELSE'
+RETURN -> 'RETURN'
+BEGIN -> 'BEGIN'
+END -> 'END'
+MAIN -> 'MAIN'
+STRING -> 'STRING'
+INT -> 'INT'
+REAL -> 'REAL'
+
+// Separatoare cu un singur caracter
+SEMICOLON -> ';'
+COMMA -> ','
+LPAREN -> '('
+RPAREN -> ')'
+
+// Operatorii cu mai multe caractere
+ASSIGN-OP -> ':='
+EQ -> '=='
+NEQ -> '!='
+
+// Identificator
+IDENT -> LETTER (LETTER | DIGIT)*
+LETTER -> [a-zA-Z]
+DIGIT -> [0-9]
+
+// Numere
+INT-CONSTANT -> DIGIT (DIGIT)*
+REAL-CONSTANT -> INT-CONSTANT DOT INT-CONSTANT
+
+// Șiruri de caractere
+QSTRING -> '"' (orice_caracter_fara_")* '"'
+
+// Comentarii
+Comentariu -> '/**' orice_text '*/'
+
+// Operatorii aditivi și multiplicativi
+ADD-OP -> '+' | '-'
+MULT-OP -> '*' | '/'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Gramatica independenta de context pentru Sample Program:
+
+<program> -> <method-decl> <method-decl-list>
+<method-decl-list> -> <method-decl> <method-decl-list> | ε
+
+<method-decl> -> <type> IDENT LPAREN <formal-params> RPAREN <block>
+<method-decl> -> <type> MAIN IDENT LPAREN <formal-params> RPAREN <block>
+
+<formal-params> -> <formal-param> <formal-param-list> | ε
+<formal-param-list> -> COMMA <formal-param> <formal-param-list> | ε
+<formal-param> -> <type> IDENT
+
+<type> -> INT | REAL | STRING
+
+<block> -> BEGIN <statements> END
+<statements> -> <statement> <statement-list>
+<statement-list> -> <statement> <statement-list> | ε
+
+<statement> -> <block>
+             | <local-var-decl>
+             | <assign-stmt>
+             | <return-stmt>
+             | <if-stmt>
+             | <write-stmt>
+             | <read-stmt>
+
+<local-var-decl> -> <type> IDENT SEMICOLON
+<local-var-decl> -> <type> <assign-stmt>
+
+<assign-stmt> -> IDENT ASSIGN-OP <expression> SEMICOLON
+               | IDENT ASSIGN-OP QSTRING SEMICOLON
+
+<return-stmt> -> RETURN <expression> SEMICOLON
+
+<write-stmt> -> WRITE LPAREN <expression> COMMA QSTRING RPAREN SEMICOLON
+<read-stmt> -> READ LPAREN IDENT COMMA QSTRING RPAREN SEMICOLON
+
+// Expresii și structuri matematice
+
+<expression> -> <mult-expr> <add-expr-list>
+<add-expr-list> -> (ADD-OP <mult-expr>)*
+ADD-OP -> '+' | '-'
+
+<mult-expr> -> <primary-expr> <mult-expr-list>
+<mult-expr-list> -> (MULT-OP <primary-expr>)*
+MULT-OP -> '*' | '/'
+
+<primary-expr> -> NUM | IDENT | LPAREN <expression> RPAREN | IDENT LPAREN <actual-params> RPAREN
+<actual-params> -> <expression> <expression-list> | ε
+<expression-list> -> COMMA <expression> <expression-list> | ε
